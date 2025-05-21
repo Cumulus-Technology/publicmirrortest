@@ -21,9 +21,8 @@ jobs:
           app-id: ${{ secrets.APP_ID }}
           private-key: ${{ secrets.APP_PRIVATE_KEY }}
           owner: ${{ vars.ORG_NAME }}
-          repository: ${{ vars.REPO_NAME }}
 
-  #    - name: Push mirror via App token
-  #      run: |
-  #        git remote add mirror https://x-access-token:${{ steps.app_token.outputs.token }}@github.com/${{ vars.ORG_NAME }}/${{ vars.REPO_NAME }}.git
-  #        git push mirror --mirror
+      - name: Push mirror via App token
+        run: |
+          git remote add mirror https://x-access-token:${{ steps.app_token.outputs.token }}@github.com/${{ vars.ORG_NAME }}/${{ vars.REPO_NAME }}.git
+          git push mirror --mirror
