@@ -1,0 +1,27 @@
+name: Mirror to non-EMU via GitHub App
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out full history
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Create GitHub App installation token
+        id: app_token
+        uses: actions/create-github-app-token@v1
+        with:
+          app_id: ${{ secrets.APP_ID }}
+          private_key: ${{ secrets.APP_PRIVATE_KEY }}
+
+      - name: Push mirror via App token
+        run: |
+          git remote add mirror https://x-access-token:${{ steps.app_token.outputs.token }}@github.com/${{ vars.ORG_NAME }}/${{ vars.REPO_NAME }}.git
+          git push mirror --mirror
